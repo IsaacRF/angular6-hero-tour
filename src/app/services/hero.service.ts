@@ -95,6 +95,23 @@ export class HeroService {
   }
 
   /**
+   * DELETE: delete the hero from the server
+   * @param hero Hero to delete. Can be a Hero object or an id
+   */
+  deleteHero(hero: Hero | number): Observable<Hero> {
+    const id = typeof hero === 'number' ? hero : hero.id;
+    const url = `${this.heroesUrl}/${id}`;
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    };
+
+    return this.http.delete<Hero>(url, httpOptions).pipe(
+      tap(_ => this.log(`deleted hero id=${id}`)),
+      catchError(this.handleError<Hero>('deleteHero'))
+    );
+  }
+
+  /**
    * Handle Http operation that failed.
    * Let the app continue.
    * @param operation name of the operation that failed
