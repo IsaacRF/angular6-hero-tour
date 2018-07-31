@@ -36,7 +36,7 @@ export class HeroesComponent implements OnInit {
   getHeroes(): void {
     //Wait for heroes retrieval, subscribe to observable returned by service
     this.heroService.getHeroes()
-        .subscribe(heroes => this.heroes = heroes);
+      .subscribe(heroes => this.heroes = heroes);
   }
 
   /**
@@ -48,4 +48,18 @@ export class HeroesComponent implements OnInit {
     this.selectedHero = hero;
   }*/
 
+  /**
+   * Adds a new hero to data service and refreshes UI
+   * @param name Name of the new hero
+   */
+  add(name: string): void {
+    name = name.trim();
+    if (!name) { return; }
+
+    this.heroService.addHero({ name } as Hero)
+      .subscribe(hero => {
+        //If hero is added correctly to data service, add it to UI list too
+        this.heroes.push(hero);
+      });
+  }
 }
